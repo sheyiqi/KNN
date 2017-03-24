@@ -28,7 +28,7 @@ def datatoarray(fname):
         for j in range(0,32):
             arr.append(int(thisline[j]))
     return arr
-#a=datatoarray("D:/Python35/traindata/0_3.txt")
+#a=datatoarray("/home/yiqi.she/knn/traindata/0_3.txt")
 #取文件名前缀（类别）
 def seplabel(fname):
     filestr=fname.split(".")[0]
@@ -39,7 +39,7 @@ def seplabel(fname):
 #tainarr：[[特征1，特征2，特征3],[特征1，特征2，特征3],[特征1，特征2，特征3]]
 def traindata():
     labels=[]
-    trainfile=listdir("D:/Python35/traindata")
+    trainfile=listdir("/home/yiqi.she/foo/knn/traindata")
     num=len(trainfile)
     #列为1024,行为num的数组
     trainarr=zeros((num,1024))
@@ -47,12 +47,12 @@ def traindata():
         thisname=trainfile[i]
         thislabel=seplabel(thisname)
         labels.append(thislabel)
-        trainarr[i,:]=datatoarray("D:/Python35/traindata/"+thisname)
+        trainarr[i,:]=datatoarray("/home/yiqi.she/foo/knn/traindata/"+thisname)
     return trainarr,labels
         
 trainarr,labels=traindata()
 thistestfile="5_66.txt"
-testarr=datatoarray("D:/Python35/testdata/"+thistestfile)
+testarr=datatoarray("/home/yiqi.she/foo/knn/testdata/"+thistestfile)
 rst=knn(3,testarr,trainarr,labels)
 print(rst)
 #小作业
