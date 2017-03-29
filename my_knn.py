@@ -2,24 +2,18 @@ from numpy import *
 import operator
 from os import listdir
 def knn(k,testdata,traindata,labels):
-    #testdata:[特征1，特征2，特征3]
-    #traindata:[[特征1，特征2，特征3],[特征1，特征2，特征3],[特征1，特征2，特征3]]
     traindatasize=traindata.shape[0]
     dif=tile(testdata,(traindatasize,1))-traindata
     sqdif=dif**2
-    #sumsqdif已经成为一维的了[a,b,c,d]
     sumsqdif=sqdif.sum(axis=1)
     distance=sumsqdif**0.5
     sortdistance=distance.argsort()
-    #sortdistance指的是测试数据与各训练数据的距离由近到远排序之后的结果列表
-    count={}#{"类别":"次数"}
+    count={}
     for i in range(0,k):
-        vote=labels[sortdistance[i]]#当前距离的类别是谁（由近至远）
+        vote=labels[sortdistance[i]]
         count[vote]=count.get(vote,0)+1
-    #print(count)
     sortcount=sorted(count.items(),key=operator.itemgetter(1),reverse=True)
     return sortcount[0][0]
-#数据加载
 def datatoarray(fname):
     arr=[]
     fh=open(fname)
@@ -28,40 +22,31 @@ def datatoarray(fname):
         for j in range(0,32):
             arr.append(int(thisline[j]))
     return arr
-#a=datatoarray("/home/yiqi.she/knn/traindata/0_3.txt")
-#取文件名前缀（类别）
 def seplabel(fname):
     filestr=fname.split(".")[0]
     label=int(filestr.split("_")[0])
     return label
-#建立训练数据
-#labels:[类别,类别，类别,类别]
-#tainarr：[[特征1，特征2，特征3],[特征1，特征2，特征3],[特征1，特征2，特征3]]
 def traindata():
     labels=[]
-    trainfile=listdir("/home/yiqi.she/foo/knn/traindata")
+    trainfile=listdir("/home/yiqishe/git/knn/traindata")
     num=len(trainfile)
-    #列为1024,行为num的数组
     trainarr=zeros((num,1024))
     for i in range(0,num):
         thisname=trainfile[i]
         thislabel=seplabel(thisname)
         labels.append(thislabel)
-        trainarr[i,:]=datatoarray("/home/yiqi.she/foo/knn/traindata/"+thisname)
+        trainarr[i,:]=datatoarray("/home/yiqishe/git/knn/traindata/"+thisname)
     return trainarr,labels
-#实现将testdata里面的数据批量识别（提示：通过循环）
-#testdata        
 def testdata():
     labels=[]
-    testfile=listdir("/home/yiqi.she/foo/knn/testdata")
+    testfile=listdir("/home/yiqishe/git/knn/testdata")
     num=len(testfile)
-    #列为1024,行为num的数组
     testarr=zeros((num,1024))
     for i in range(0,num):
         thisname=testfile[i]
         thislabel=seplabel(thisname)
         labels.append(thislabel)
-        testarr[i,:]=datatoarray("/home/yiqi.she/foo/knn/testdata/"+thisname)
+        testarr[i,:]=datatoarray("/home/yiqishe/git/knn/testdata/"+thisname)
     return testarr,labels
 trainarr,labels1=traindata()
 testarr,labels2=testdata()
@@ -72,4 +57,3 @@ for i in range(len(testarr)):
         ans+=1
 ans = ans/len(testarr)
 print (ans)
-#2：实现计算识别准确率
